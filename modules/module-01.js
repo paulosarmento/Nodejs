@@ -1,10 +1,12 @@
 console.log('Executando Module-01.js')
 
-module.exports.oculta = ()=>{
+const oculta = ()=>{
     console.log('Executando função Oculta')
 }
-module.exports.executa = ()=>{
+const executa = ()=>{
     console.log('Executando a função executa')
 }
 
-module.exports.welcome = `Bem Vindo ao módulo module-02.js`
+const welcome = `Bem Vindo ao módulo module-01.js`
+
+module.exports = {executa, welcome, oculta}
