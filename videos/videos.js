@@ -1,11 +1,28 @@
 const {spawn} = require("child_process")
-const { resolve } = require("path")
-const { rejects } = require("assert")
+
+//Node videos ./src
+const parent = process.argv[2]
+let videos = []
+
+if(process.argv[2]){
+
+    const start = parseInt(process.argv[3])
+    const end = parseInt(process.argv[4])
+
+    for(let i = start; i <= end; i++){
+        videos.push(i);
+    }
+    videos.reverse();
+    processVideo()
+}else{
+    console.log('É necessario criar um diretório de nível superior')
+}
+
 
 function resize(video, quality){
     const p = new Promise((resolve, reject)=>{
         const ffmpeg = spawn('./ffmpeg/bin/ffmpeg', [
-            'i',
+            '-i',
             `${parent}/${video}.mp4`,
             '-codec:v',
             'libx264',
@@ -36,4 +53,20 @@ function resize(video, quality){
 
     })
     return p
+}
+
+async function processVideo(){
+    let video = videos.pop()
+    if(video){
+        try{
+            await resize(video, 720)
+            await resize(video, 480)
+            await resize(video, 360)
+
+            console.log(`Videos renderizados - ${video}`)
+            processVideo()
+        }catch(e){
+            console.log(e)
+        }
+    }
 }
